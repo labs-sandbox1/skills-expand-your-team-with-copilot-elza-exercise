@@ -415,12 +415,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Function to display filtered activities
-  function displayFilteredActivities() {
-    // Clear the activities list
-    activitiesList.innerHTML = "";
-
-    // Apply client-side filtering - this handles category filter and search, plus weekend filter
+  // Function to get filtered activities based on current filters
+  function getFilteredActivities() {
     let filteredActivities = {};
 
     Object.entries(allActivities).forEach(([name, details]) => {
@@ -460,6 +456,17 @@ document.addEventListener("DOMContentLoaded", () => {
       // Activity passed all filters, add to filtered list
       filteredActivities[name] = details;
     });
+
+    return filteredActivities;
+  }
+
+  // Function to display filtered activities
+  function displayFilteredActivities() {
+    // Clear the activities list
+    activitiesList.innerHTML = "";
+
+    // Get filtered activities
+    const filteredActivities = getFilteredActivities();
 
     // Check if there are any results
     if (Object.keys(filteredActivities).length === 0) {
@@ -498,46 +505,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Render calendar view
   function renderCalendarView() {
-    // Apply client-side filtering - same as card view
-    let filteredActivities = {};
-
-    Object.entries(allActivities).forEach(([name, details]) => {
-      const activityType = getActivityType(name, details.description);
-
-      // Apply category filter
-      if (currentFilter !== "all" && activityType !== currentFilter) {
-        return;
-      }
-
-      // Apply weekend filter if selected
-      if (currentTimeRange === "weekend" && details.schedule_details) {
-        const activityDays = details.schedule_details.days;
-        const isWeekendActivity = activityDays.some((day) =>
-          timeRanges.weekend.days.includes(day)
-        );
-
-        if (!isWeekendActivity) {
-          return;
-        }
-      }
-
-      // Apply search filter
-      const searchableContent = [
-        name.toLowerCase(),
-        details.description.toLowerCase(),
-        formatSchedule(details).toLowerCase(),
-      ].join(" ");
-
-      if (
-        searchQuery &&
-        !searchableContent.includes(searchQuery.toLowerCase())
-      ) {
-        return;
-      }
-
-      // Activity passed all filters, add to filtered list
-      filteredActivities[name] = details;
-    });
+    // Get filtered activities
+    const filteredActivities = getFilteredActivities();
 
     // Create calendar structure
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
