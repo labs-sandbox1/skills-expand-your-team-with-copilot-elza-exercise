@@ -406,8 +406,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // Save the activities data
       allActivities = activities;
 
-      // Apply search and filter, and handle weekend filter in client
-      displayFilteredActivities();
+      // Update current view (card or calendar)
+      updateCurrentView();
     } catch (error) {
       activitiesList.innerHTML =
         "<p>Failed to load activities. Please try again later.</p>";
