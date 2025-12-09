@@ -419,6 +419,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function getFilteredActivities() {
     let filteredActivities = {};
 
+    // Handle empty or undefined allActivities
+    if (!allActivities || Object.keys(allActivities).length === 0) {
+      return filteredActivities;
+    }
+
     Object.entries(allActivities).forEach(([name, details]) => {
       const activityType = getActivityType(name, details.description);
 
@@ -564,9 +569,12 @@ document.addEventListener("DOMContentLoaded", () => {
       // Check if activity occurs on this day
       if (!days.includes(day)) return;
       
-      // Parse start and end times
-      const [startHour] = start_time.split(':').map(Number);
-      const [endHour] = end_time.split(':').map(Number);
+      // Parse start and end times (handle HH:MM or HH:MM:SS formats)
+      const startHour = parseInt(start_time.split(':')[0], 10);
+      const endHour = parseInt(end_time.split(':')[0], 10);
+      
+      // Validate parsed hours
+      if (isNaN(startHour) || isNaN(endHour)) return;
       
       // Check if activity spans this hour
       if (hour >= startHour && hour < endHour) {
@@ -691,8 +699,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const totalSpots = details.max_participants;
     const isFull = takenSpots >= totalSpots;
     
-    // Only open registration modal if user is authenticated and activity is not full
-    if (currentUser && !isFull) {
+    // Provide feedback based on state
+    if (!currentUser) {
+      showMessage("Please log in as a teacher to register students.", "info");
+    } else if (isFull) {
+      showMessage(`${activityName} is full. No spots available.`, "info");
+    } else {
       openRegistrationModal(activityName);
     }
   }
