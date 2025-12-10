@@ -287,6 +287,61 @@ section h3 {
   border: none;
 }
 
+/* Share buttons */
+.share-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-light);
+  justify-content: center;
+}
+
+.share-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.share-button {
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.share-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.share-button.facebook-share:hover {
+  background-color: #1877f2;
+  border-color: #1877f2;
+}
+
+.share-button.twitter-share:hover {
+  background-color: #1da1f2;
+  border-color: #1da1f2;
+}
+
+.share-button.email-share:hover {
+  background-color: #ea4335;
+  border-color: #ea4335;
+}
+
+.share-icon {
+  font-size: 1.1rem;
+}
+
 button {
   background-color: var(--primary);
   color: white;
